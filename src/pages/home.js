@@ -7,7 +7,6 @@ import Profile from "../components/Profile";
 import { connect } from "react-redux";
 import { getPosts } from "../redux/actions/dataActions";
 
-
 import PropTypes from "prop-types";
 
 class home extends Component {
@@ -16,24 +15,23 @@ class home extends Component {
   }
 
   render() {
-    console.log(this.props);
     const {
       data: { posts, loading }
     } = this.props;
-    console.log(posts.length > 0 && !loading);
-    let loadingMessage = !loading ? 'Network Error' : 'Loading...' ; 
+    let loadingMessage = !loading ? "Network Error" : "Loading...";
 
-    let postsMarkup = posts.length > 0 && !loading ? (
-       posts.map(post => {
-        return <Post  post={post} />;
-      })
-    ) : (
-    <p>{loadingMessage}</p>
-    );
+    let postsMarkup =
+      posts.length > 0 && !loading ? (
+        posts.map(post => {
+          return <Post post={post} />;
+        })
+      ) : (
+        <p>{loadingMessage}</p>
+      );
     return (
       <Grid container spacing={3}>
         <Grid item sm={8} xs={12}>
-          {postsMarkup} 
+          {postsMarkup}
           <p></p>
         </Grid>
         <Grid item sm={4} xs={12}>

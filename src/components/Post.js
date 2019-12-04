@@ -18,22 +18,21 @@ import Chat from "@material-ui/icons/Chat";
 import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
 import Delete from "@material-ui/icons/Delete";
-import { deltePost } from '../redux/actions/dataActions'
+import { deltePost } from "../redux/actions/dataActions";
 
-import DeletePost from './DeletePost';
+import DeletePost from "./DeletePost";
 
 const styles = {
   card: {
-    position: 'relative',
+    position: "relative",
     display: "flex",
     marginBottom: 20
   },
   image: {
     width: 100,
     minWidth: 80,
-    borderRadius: '10%',
-    margin: '10px 20px',
-  
+    borderRadius: "10%",
+    margin: "10px 20px"
   },
 
   content: {
@@ -70,35 +69,39 @@ class Post extends Component {
       likeCount,
       userHandle,
       postId,
-      commentCount,
-
+      commentCount
     } = this.props.post;
     // const { body, userHandle } = this.props.post
-    const { authonticated, credentials: { handle } } = this.props.user;
+    const {
+      authonticated,
+      credentials: { handle }
+    } = this.props.user;
     const likeButton = !authonticated ? (
       <Tooltip title="Like Post">
-        <IconButton  className="button">
-         <Link to="/login">
-         <ThumbUpAltOutlinedIcon color="primary" />
-         </Link>
+        <IconButton className="button">
+          <Link to="/login">
+            <ThumbUpAltOutlinedIcon color="primary" />
+          </Link>
         </IconButton>
-      </Tooltip> 
+      </Tooltip>
+    ) : this.likedPost() ? (
+      <Tooltip title="Unlike Post">
+        <IconButton onClick={this.unlikePost} className="button">
+          <ThumbUpAltIcon color="primary" />
+        </IconButton>
+      </Tooltip>
     ) : (
-      this.likedPost() ? (<Tooltip title="Unlike Post">
-      <IconButton onClick={this.unlikePost} className="button">
-        <ThumbUpAltIcon color="primary" />
-      </IconButton>
-    </Tooltip>) : (<Tooltip title="Like Post">
-      <IconButton onClick={this.likePost} className="button">
-        <ThumbUpAltOutlinedIcon color="primary" />
-      </IconButton>
-    </Tooltip>)
-      
+      <Tooltip title="Like Post">
+        <IconButton onClick={this.likePost} className="button">
+          <ThumbUpAltOutlinedIcon color="primary" />
+        </IconButton>
+      </Tooltip>
     );
 
-  const deleteButton = authonticated &&  userHandle === handle ? <DeletePost postId={postId} /> : null; 
-
-    
+    const deleteButton =
+      authonticated && userHandle === handle ? (
+        <DeletePost postId={postId} />
+      ) : null;
 
     return (
       <Card className={classes.card}>
@@ -124,7 +127,6 @@ class Post extends Component {
           <Typography variant="body1">{body}</Typography>
           {likeButton}
           <span>{likeCount} likes</span>
-          
         </CardContent>
       </Card>
     );

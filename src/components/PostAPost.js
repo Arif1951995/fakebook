@@ -23,120 +23,128 @@ import Add from "@material-ui/icons/Add";
 import style from "./styles";
 
 const styles = {
-    ...style,
-    closeButton: {
-        position: 'absolute',
-        left: '85%',
-        top: '10%'
-    }
-
+  ...style,
+  closeButton: {
+    position: "absolute",
+    left: "85%",
+    top: "10%"
+  }
 };
 
- class PostAPost extends Component {
-     state = {
-         open: false,
-         body: '',
-         errors: {}
-     }
-     handleOpen = () => {
-         this.setState({open: true});
-     }
+class PostAPost extends Component {
+  state = {
+    open: false,
+    body: "",
+    errors: {}
+  };
+  handleOpen = () => {
+    this.setState({ open: true });
+  };
 
-     handleClose = () => {
-        this.setState({open: false, errors: {}});
-        this.props.clearErrors();
-        
+  handleClose = () => {
+    this.setState({ open: false, errors: {} });
+    this.props.clearErrors();
+  };
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    this.props.postAPost({ body: this.state.body });
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.ui.errors) {
+      this.setState({ errors: nextProps.ui.errors });
     }
-    handleChange = event => {
-        const { name, value } = event.target;
-            console.log(this.state.body);
-        this.setState({
-          [name]: value
-        });
-      };
+    if (!nextProps.ui.errors && !nextProps.ui.loading) {
+      this.setState({ body: "", open: false, errors: {} });
+    }
+  }
+  render() {
+    const { errors } = this.state;
+    const {
+      classes,
+      ui: { loading }
+    } = this.props;
 
-      handleSubmit = event => {
-        event.preventDefault();
-    
-        console.log('clicked')
-        console.log(this.state.body);
-        this.props.postAPost({body: this.state.body });
-
-      };
-
-      componentWillReceiveProps(nextProps) {
-          console.log(nextProps.ui.errors);
-          if(nextProps.ui.errors) {
-              this.setState({errors: nextProps.ui.errors})
-          }
-          if(!nextProps.ui.errors && !nextProps.ui.loading) {
-            
-
-            this.setState({body: '', open: false, errors: {}})
-
-          }
-      }
-    render() {
-        const { errors } = this.state;
-        const { classes, ui: { loading } } = this.props;
-
-
-        return (
-           <Fragment>
-                <Tooltip title="Post Your Status">
-              <IconButton onClick={this.handleOpen} className="button">
-                    Post
-              </IconButton>
-              </Tooltip>
-              <Dialog
-              open={this.state.open}
-              onClose={this.handleClose}
-              fullWidth
-              maxWidth="sm"
+    return (
+      <Fragment>
+        <Tooltip title="Post Your Status">
+          <IconButton onClick={this.handleOpen} className="button">
+            Post
+          </IconButton>
+        </Tooltip>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          fullWidth
+          maxWidth="sm"
+        >
+          <Tooltip title="Close">
+            <IconButton
+              onClick={this.handleClose}
+              className={classes.closeButton}
+            >
+              <Close />
+            </IconButton>
+          </Tooltip>
+          <DialogTitle>What's Your Status</DialogTitle>
+          <DialogContent>
+            <form onSubmit={this.handleSubmit}>
+              <TextField
+                name="body"
+                type="text"
+                label="Post"
+                multiline
+                rows="3"
+                placeholder="Post Your Status"
+                error={errors.comment}
+                helperText={
+                  errors.comment && errors.comment.split("comment ")[1]
+                }
+                className={classes.textField}
+                onChange={this.handleChange}
+                fullWidth
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.submitButton}
+                disabled={loading}
               >
-                   <Tooltip title="Close">
-              <IconButton onClick={this.handleClose} className={classes.closeButton}>
-                <Close    />
-              </IconButton>
-              </Tooltip>
-                <DialogTitle>What's Your Status</DialogTitle>
-                <DialogContent>
-                    <form onSubmit={this.handleSubmit}> 
-                        <TextField 
-                        name="body" 
-                        type="text"
-                        label="Post"
-                        multiline
-                        rows="3"
-                        placeholder="Post Your Status"
-                        error={errors.comment}
-                        helperText={errors.comment && errors.comment.split('comment ')[1]}
-                        className={classes.textField}
-                        onChange={this.handleChange}  
-                        fullWidth                      
-                        /> 
-                    <Button type="submit" variant="contained" color="primary" className={classes.submitButton}
-                    disabled={loading}>
-                       {loading ? <CircularProgress size={30} className={classes.progressSpinner} /> : 'Submit'} 
-                    
-                    </Button>
-
-                    </form>
-                </DialogContent>
-              </Dialog>
-           </Fragment>
-        )
-    }
+                {loading ? (
+                  <CircularProgress
+                    size={30}
+                    className={classes.progressSpinner}
+                  />
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </Fragment>
+    );
+  }
 }
 
 PostAPost.propTypes = {
-    postAPost: PropTypes.func.isRequired,
-    ui: PropTypes.object.isRequired,
-    clearErrors: PropTypes.func.isRequired,
-
-}
+  postAPost: PropTypes.func.isRequired,
+  ui: PropTypes.object.isRequired,
+  clearErrors: PropTypes.func.isRequired
+};
 const mapStateToProps = state => ({
-    ui: state.ui
-})
+  ui: state.ui
+});
 
-export default   connect(mapStateToProps, { postAPost, clearErrors })(withStyles(styles)(PostAPost))
+export default connect(mapStateToProps, { postAPost, clearErrors })(
+  withStyles(styles)(PostAPost)
+);

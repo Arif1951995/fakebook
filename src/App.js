@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
-import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 
 import home from "./pages/home";
@@ -20,16 +20,15 @@ import store from "./redux/store";
 import { SET_AUTHONTICATED } from "./redux/types";
 import { getUserData, logoutUser } from "./redux/actions/userActions";
 
-axios.defaults.baseURL = "https://cors-anywhere.herokuapp.com/https://asia-east2-fakebook-39e52.cloudfunctions.net/api"
-
+axios.defaults.baseURL =
+  "https://cors-anywhere.herokuapp.com/https://asia-east2-fakebook-39e52.cloudfunctions.net/api";
 
 const theme = createMuiTheme(styles);
 
 const token = localStorage.FBIdToken;
-console.log(token);
 if (token) {
   const decodedToken = jwtDecode(token);
-  
+
   if (decodedToken.exp * 1000 < Date.now()) {
     store.dispatch(logoutUser());
     window.location.href = "/login";
@@ -40,8 +39,6 @@ if (token) {
     store.dispatch(getUserData());
   }
 
-  console.log(decodedToken);
-
   // authonticated = true;
 }
 
@@ -49,22 +46,21 @@ function App() {
   return (
     <Provider store={store}>
       {/* <MuiThemeProvider theme={theme}> */}
-        <Router>
-          <Navbar />
+      <Router>
+        <Navbar />
 
-          <div className="container">
-            <Switch>
-              <Route exact path="/" component={home} />
-              <AuthRoute exact path="/signup" component={signup} />
+        <div className="container">
+          <Switch>
+            <Route exact path="/" component={home} />
+            <AuthRoute exact path="/signup" component={signup} />
 
-              <AuthRoute exact path="/login" component={login} />
-            </Switch>
-          </div>
-        </Router>
+            <AuthRoute exact path="/login" component={login} />
+          </Switch>
+        </div>
+      </Router>
       {/* </MuiThemeProvider> */}
     </Provider>
   );
 }
-
 
 export default App;

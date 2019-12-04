@@ -36,7 +36,6 @@ class login extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps.ui.errors) {
       this.setState({ errors: nextProps.ui.errors });
     }
@@ -48,7 +47,6 @@ class login extends Component {
       ui: { loading }
     } = this.props;
     const { errors } = this.state;
-    console.log(errors);
 
     return (
       <Grid container className={classes.form}>

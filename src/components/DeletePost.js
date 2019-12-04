@@ -27,68 +27,61 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 
 const styles = {
-    deleteButton: {
-            position: 'absolute',
-            left: '85%',
-            top: '10%'
-    }
+  deleteButton: {
+    position: "absolute",
+    left: "85%",
+    top: "10%"
+  }
+};
 
-}
-
- class DeletePost extends Component {
-    state = {
-        open: false,
-    }
-    handleOpen = () => {
-        this.setState({open: true});
-        console.log('clicked')
-    }
-    handleClose = () => {
-        this.setState({open: false});
-    }
-    deletePost = () => {
-        this.props.deletePost(this.props.postId);
-        this.setState({open: false});
-
-    }
-
-    render() {
-        const  { classes } = this.props;
-        return (
-            <Fragment>
-                 <Tooltip title="Delete Post" className={classes.deleteButton}>
-                <IconButton onClick={this.handleOpen} >
-                  <Delete  color="primary" />
-                </IconButton>
-              </Tooltip>
-              <Dialog
-              open={this.state.open}
-              onClose={this.handleClose}
-              fullWidth
-              maxWidth="sm"
-              >
-                  <DialogTitle>
-                      Are You Sure You Want to Delete the Post
-                  </DialogTitle>
-                  <DialogActions>
-                      <Button onClick={this.handleClose} color="primary">
-                          Cancel
-                      </Button>
-                      <Button onClick={this.deletePost} color="primary">
-                          Delete
-                      </Button>
-                  </DialogActions>
-
-              </Dialog>
-            </Fragment>
-        )
-    }
-}
-DeletePost.propTypes = {
-    deletePost: PropTypes.func.isRequired,
-    classes: PropTypes.object.isRequired,
-    postId: PropTypes.string.isRequired
+class DeletePost extends Component {
+  state = {
+    open: false
+  };
+  handleOpen = () => {
+    this.setState({ open: true });
+  };
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+  deletePost = () => {
+    this.props.deletePost(this.props.postId);
+    this.setState({ open: false });
   };
 
+  render() {
+    const { classes } = this.props;
+    return (
+      <Fragment>
+        <Tooltip title="Delete Post" className={classes.deleteButton}>
+          <IconButton onClick={this.handleOpen}>
+            <Delete color="primary" />
+          </IconButton>
+        </Tooltip>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle>Are You Sure You Want to Delete the Post</DialogTitle>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.deletePost} color="primary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Fragment>
+    );
+  }
+}
+DeletePost.propTypes = {
+  deletePost: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  postId: PropTypes.string.isRequired
+};
 
-export default  connect(null, { deletePost })(withStyles(styles)(DeletePost))
+export default connect(null, { deletePost })(withStyles(styles)(DeletePost));
